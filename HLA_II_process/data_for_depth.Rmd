@@ -1,0 +1,85 @@
+---
+title: "data_for_DePTH"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+combo_xcr <- read.csv("/Users/fuminli/Downloads/combo_xcr.tsv", sep = "\t")
+```
+
+```{r}
+sig_pair_II_DePTH$class = 1
+neg_pair_II$class = 0
+sig_pair_II_DePTH$v <- gsub("C", "", sig_pair_II$v)
+neg_pair_II$v <- gsub("C", "", neg_pair_II$v)
+test_pair_II <- rbind(sig_pair_II_DePTH, neg_pair_II)
+```
+
+```{r}
+test_pair_II$v <- gsub("BV0+", "BV", test_pair_II$v)  
+test_pair_II$v <- gsub("-0+", "-", test_pair_II$v)  
+test_pair_II$v <- gsub("C", "", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV19-1", "TRBV19", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV14-1", "TRBV14", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV27-1", "TRBV27", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV18-1", "TRBV18", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV13-1", "TRBV13", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV28-1", "TRBV28", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV2-1", "TRBV2", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV9-1", "TRBV9", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV16-1", "TRBV16", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV1-1", "TRBV1", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV15-1", "TRBV15", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV30-1", "TRBV30", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV1-2\\*01", "not_found", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV1-3\\*01", "not_found", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV6-2\\*02", "not_found", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV3-1\\*05", "not_found", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV2\\*04", "not_found", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV1\\*03", "not_found", test_pair_II$v)
+test_pair_II$v <- gsub("TRBV10-1\\*03", "not_found", test_pair_II$v)
+```
+
+```{r}
+test_pair_II[test_pair_II$v == "TRBV20",]$v = "not_found"
+test_pair_II[test_pair_II$v == "TRBV12",]$v = "not_found"
+test_pair_II[test_pair_II$v == "TRBV6",]$v = "not_found"
+test_pair_II[test_pair_II$v == "TRBV7",]$v = "not_found"
+test_pair_II[test_pair_II$v == "TRBV4",]$v = "not_found"
+test_pair_II[test_pair_II$v == "TRBV11",]$v = "not_found"
+test_pair_II[test_pair_II$v == "TRBV5",]$v = "not_found"
+```
+
+```{r}
+setdiff(test_pair_II$v, combo_xcr$id)
+```
+
+```{r}
+rows_with_star <- grep("\\*", test_pair_II$tcr)
+test_pair_II <- test_pair_II[-rows_with_star, ]
+```
+
+```{r}
+test_pair_II$tcr <- paste(test_pair_II$v, test_pair_II$tcr, sep = ",")
+temp <- test_pair_II[,c(2,3)]
+test_pair_II <- separate(test_pair_II, tcr, into = c("v", "tcr"), sep = ",")
+```
+
+```{r}
+colnames(temp) <- c("tcr", "hla_allele")
+write.csv(temp,"/Users/fuminli/Desktop/TCR\ project/delmonte/HLA_II_DePTH/test_pair_II.csv")
+```
+
+```{r}
+test_pair_II_score <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_II_DePTH/test_pair_II_output/predicted_scores.csv")
+test_pair_II$score <- test_pair_II_score$score
+```
+
+
+

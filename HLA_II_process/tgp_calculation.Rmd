@@ -1,0 +1,29 @@
+---
+title: "TGP_calculation"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+write.table(test_pair_II$tcr, "/Users/fuminli/Desktop/TCR project/test_tgp.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
+```
+
+```{r}
+test_pair_II_tgp <- read.csv("/Users/fuminli/Desktop/TCR project/test_tgp_result.tsv", header = FALSE, sep = "\t")
+colnames(test_pair_II_tgp) <- c("tcr", "TGP")
+test_pair_II$magnitude <- -log10(test_pair_II_tgp$TGP)
+test_pair_II$normalized_tgp <- (test_pair_II$magnitude - 6)/4
+test_pair_II[test_pair_II$normalized_tgp<0,]$normalized_tgp = 0
+test_pair_II[test_pair_II$normalized_tgp>1,]$normalized_tgp = 1
+```
+
+
+
+
+
+
