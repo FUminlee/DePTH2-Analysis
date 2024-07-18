@@ -1,0 +1,83 @@
+---
+title: "top_10000_tcr"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+top_tcr_test <- read.csv("/Users/fuminli/Desktop/TCR\ project/Delmonte_2023_677_top10000_scores/HLA_I_all_match_predict_delmonte_top_ensemble_102-BV-1145_TCRB/predicted_scores.csv")
+```
+
+```{r}
+hla_info <- hla_II_count[,1]
+tcr_info <- unique(top_tcr_test[,1])
+hla_II_top_tcr <- merge(hla_info, tcr_info, by = NULL)
+colnames(hla_II_top_tcr) = c("hla_allele", "tcr")
+hla_II_top_tcr <- hla_II_top_tcr[,c(2,1)]
+```
+
+```{r}
+write.csv(hla_II_top_tcr[1:200000,], "/Users/fuminli/Desktop/TCR\ project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_1.csv")
+write.csv(hla_II_top_tcr[200001:400000,], "/Users/fuminli/Desktop/TCR\ project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_2.csv")
+write.csv(hla_II_top_tcr[400001:600000,], "/Users/fuminli/Desktop/TCR\ project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_3.csv")
+write.csv(hla_II_top_tcr[600001:800000,], "/Users/fuminli/Desktop/TCR\ project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_4.csv")
+write.csv(hla_II_top_tcr[800001:1000000,], "/Users/fuminli/Desktop/TCR\ project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_5.csv")
+write.csv(hla_II_top_tcr[1000001:1200000,], "/Users/fuminli/Desktop/TCR\ project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_6.csv")
+write.csv(hla_II_top_tcr[1200001:1400000,], "/Users/fuminli/Desktop/TCR\ project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_7.csv")
+write.csv(hla_II_top_tcr[1400001:1520000,], "/Users/fuminli/Desktop/TCR\ project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_8.csv")
+```
+
+```{r}
+hla_II_top_tcr_1 <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_1/predicted_scores.csv")[,c(2, 3, 4)]
+hla_II_top_tcr_2 <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_2/predicted_scores.csv")[,c(2, 3, 4)]
+hla_II_top_tcr_3 <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_3/predicted_scores.csv")[,c(2, 3, 4)]
+hla_II_top_tcr_4 <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_4/predicted_scores.csv")[,c(2, 3, 4)]
+hla_II_top_tcr_5 <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_5/predicted_scores.csv")[,c(2, 3, 4)]
+hla_II_top_tcr_6 <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_6/predicted_scores.csv")[,c(2, 3, 4)]
+hla_II_top_tcr_7 <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_7/predicted_scores.csv")[,c(2, 3, 4)]
+hla_II_top_tcr_8 <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_II_top_tcr/hla_II_top_tcr_8/predicted_scores.csv")[,c(2, 3, 4)]
+hla_II_top_tcr <- rbind(hla_II_top_tcr_1, hla_II_top_tcr_2, hla_II_top_tcr_3, hla_II_top_tcr_4, hla_II_top_tcr_5, hla_II_top_tcr_6, hla_II_top_tcr_7, hla_II_top_tcr_8)
+```
+
+```{r}
+hla_II_top_tcr_mean <- hla_II_top_tcr %>%
+  group_by(tcr) %>%
+  summarise(mean_score = mean(score))
+```
+
+```{r}
+hla_II_top_tcr_mean <- hla_II_top_tcr_mean %>%
+  separate(tcr, into = c("v", "tcr"), sep = ",")
+```
+
+```{r}
+write.table(hla_II_top_tcr_mean$tcr, "/Users/fuminli/Desktop/TCR project/test_tgp.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
+```
+
+```{r}
+top_tcr_tgp <- read.csv("/Users/fuminli/Desktop/TCR project/test_tgp_result.tsv", header = FALSE, sep = "\t")
+colnames(top_tcr_tgp) <- c("tcr", "TGP")
+```
+
+```{r}
+hla_II_top_tcr_test <- unique(inner_join(hla_II_top_tcr_mean[,c(2,3)], top_tcr_tgp, by = "tcr"))
+hla_II_top_tcr_test$magnitude <- -log10(hla_II_top_tcr_test$TGP)
+```
+
+```{r}
+ggplot(data = hla_II_top_tcr_test, mapping = aes(x = mean_score, y = magnitude)) +
+  geom_pointdensity() +
+  scale_color_viridis_c() + 
+  ylab(expression(-log[10](TGP))) +
+  xlab("DePTH mean score") +
+  theme(text = element_text(size = 16), 
+        axis.title = element_text(size = 18), 
+        axis.text = element_text(size = 16),
+        legend.title = element_text(size = 16), 
+        legend.text = element_text(size = 14)) 
+```
