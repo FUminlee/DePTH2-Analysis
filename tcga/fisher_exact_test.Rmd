@@ -1,0 +1,29 @@
+---
+title: "fisher_exact_test"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+total_count <- 7611
+
+calculate_fisher_pvalue <- function(hla_count, tcr_count, cooccur_count, total) {
+  matrix_data <- matrix(c(cooccur_count, tcr_count - cooccur_count, 
+                          hla_count - cooccur_count, 
+                          total - tcr_count - hla_count + cooccur_count), 
+                        nrow = 2)
+  fisher.test(matrix_data, alternative = "greater")$p.value
+}
+
+hla_tcr_summary <- hla_tcr_summary %>%
+  rowwise() %>%
+  mutate(
+    fisher_pvalue = calculate_fisher_pvalue(hla_count, tcr_count, hla_tcr_cooccur, total_count)
+  )
+```
+

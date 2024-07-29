@@ -1,0 +1,27 @@
+---
+title: "select_neg_pairs"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We select neg_pairs 5 time as sig_pairs with the criterion: The ratio of each HLA is the same between neg_pairs and sig_pairs.
+
+
+```{r}
+neg_pairs <- data.frame()
+for (i in 1:nrow(sig_pairs)) {
+  hla <- sig_pairs$hla[i]
+  subset_hla <- hla_tcr_summary[46:62560,] %>% filter(hla == !!hla)
+  rownames(subset_hla) <- NULL
+  sampled_indices <- sample(1:nrow(subset_hla), size = 5, replace = FALSE)
+  sampled_pairs <- subset_hla[sampled_indices, ]
+  neg_pairs <- bind_rows(neg_pairs, sampled_pairs)
+}
+```
+
+

@@ -1,0 +1,28 @@
+---
+title: "hla_count"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+hla_allele <- hla_info[, 1:6]
+
+hla_count <- table(unlist(apply(hla_allele, 1, unique)))
+
+hla_count <- as.data.frame(hla_count)
+colnames(hla_count) <- c("hla", "count")
+
+hla_count <- hla_count[order(-hla_count$count), ]
+```
+
+```{r}
+hla_count_5 <- hla_count[hla_count$count > 4,]
+hla_count_5$hla <- paste0("HLA-", hla_count_5$hla)
+hla_count_5 <- hla_count_5[hla_count_5$hla %in% HLA_I_pseudo_40$hla,]
+```
+

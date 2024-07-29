@@ -1,0 +1,36 @@
+---
+title: "hla_tcr_cooccur"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+hla_tcr_summary <- merge(tcr_count_5, hla_count_5, by = NULL)
+colnames(hla_tcr_summary) <- c("tcr", "tcr_count", "hla", "hla_count")
+```
+
+```{r}
+hla_patient <- hla_info %>%
+  gather(key = "hla_type", value = "HLA", -patient_id) %>%
+  select(patient_id, HLA)
+hla_patient$HLA <- paste0("HLA-", hla_patient$HLA)
+
+tcr_patient <- tcr_info %>%
+  select(patient_id, aaSeq) %>%
+  rename(TCR = aaSeq)
+
+hla_tcr_summary <- hla_tcr_summary %>%
+  rowwise() %>%
+  mutate(
+    hla_tcr_cooccur = n_distinct(intersect(
+      hla_patient %>% filter(HLA == hla) %>% pull(patient_id),
+      tcr_patient %>% filter(TCR == tcr) %>% pull(patient_id)
+    ))
+  )
+```
+
