@@ -1,0 +1,34 @@
+---
+title: "score_mean_variance"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+grouped_data <- top_tcr_test %>%
+  group_by(tcr) %>%
+  summarise(mean_score = mean(score), var_score = var(score))
+```
+
+```{r}
+ggplot(grouped_data[sample(10000,1000),], aes(x=mean_score, y=var_score)) + 
+  geom_point(size = 1, alpha = 0.5) + 
+  geom_hline(yintercept = 1/12, linetype = "dashed", color = "blue") +
+  geom_text(aes(x = Inf, y = 1/12, label = "Variance of uniform[0,1]"), vjust = 1.2, hjust = 1.1, color = "blue") +
+  geom_hline(yintercept = (1/6)^2, linetype = "dotted", color = "red") +
+  geom_text(aes(x = Inf, y = (1/6)^2, label = "Variance of normal[0.5, (1/6)^2]"), vjust = 1.2, hjust = 1.1, color = "red")
+```
+```{r}
+ggplot(grouped_data[sample(10000,1000),], aes(x=mean_score, y=var_score)) + 
+  geom_point(size = 1, alpha = 0.5) + 
+  geom_hline(yintercept = (1/6)^2, linetype = "dotted", color = "red") +
+  geom_text(aes(x = Inf, y = (1/6)^2, label = "Variance of normal[0.5, (1/6)^2]"), vjust = 1.2, hjust = 1.1, color = "red")
+```
+
+
+

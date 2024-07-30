@@ -1,0 +1,175 @@
+---
+title: "tgp_prediction"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+colnames(neg_pair)[5] <- "hla"
+delmonte_test <- rbind(neg_pair[,c(2,3,5,6,8)], sig_pair[,c(2,3,6,8,9)])
+```
+
+```{r}
+write.table(delmonte_test$tcr, "/Users/fuminli/Desktop/TCR\ project/test_tgp.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
+```
+
+olga-compute_pgen -i "/Users/fuminli/Desktop/TCR project/test_tgp.tsv" --humanTRB -o "/Users/fuminli/Desktop/TCR project/test_tgp_result.tsv"
+
+```{r}
+delmonte_tgp <- read.table("/Users/fuminli/Desktop/TCR project/test_tgp_result.tsv")
+colnames(delmonte_tgp) <- c("tcr", "tgp")
+delmonte_tgp$magnitude <- -log10(delmonte_tgp$tgp)
+delmonte_test$magnitude <- delmonte_tgp$magnitude
+```
+
+
+# calculate the auc using only tgp and compare it with DEPTH
+```{r}
+delmonte_test$normalized_tgp <- (delmonte_test$magnitude - min(delmonte_test$magnitude))/( - min(delmonte_test$magnitude) + max(delmonte_test$magnitude))
+roc_tgp <- roc(delmonte_test$class, delmonte_test$normalized_tgp)
+
+roc_tgp_df <- data.frame(
+  FPR = 1-roc_tgp$specificities,
+  TPR = roc_tgp$sensitivities
+)
+```
+
+```{r}
+roc_depth <- roc(delmonte_test$class, delmonte_test$score)
+
+roc_depth_df <- data.frame(
+  FPR = 1-roc_depth$specificities,
+  TPR = roc_depth$sensitivities
+)
+```
+
+```{r}
+model <- glm(as.factor(class) ~ score + normalized_tgp + score*normalized_tgp, data = delmonte_test, family = binomial)
+predicted <- predict(model, type = "response")
+delmonte_test$combined_score <- predicted
+```
+
+```{r}
+roc_combined_score <- roc(delmonte_test$class, delmonte_test$combined_score)
+
+roc_combined_score_df <- data.frame(
+  FPR = 1-roc_combined_score$specificities,
+  TPR = roc_combined_score$sensitivities
+)
+```
+
+# compare the performance using tgp and depth, could tgp improve depth performance???(length match,delmonte)
+```{r}
+ggplot() +
+  geom_line(data = roc_combined_score_df, aes(x = FPR, y = TPR, color = "TGP+DePTH"), size = 1) +
+  geom_line(data = roc_depth_df, aes(x = FPR, y = TPR, color = "DePTH"), size = 1) +
+  geom_line(data = roc_tgp_df, aes(x = FPR, y = TPR, color = "TGP"), size = 1) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  scale_color_manual(values = c("TGP" = "blue",
+                                 "DePTH" = "purple",
+                                "TGP+DePTH" = "green"),
+                     labels = c("TGP" = paste("TGP: ", round(roc_tgp$auc,3)),"DePTH" = paste("DePTH ", round(roc_depth$auc,3)), "TGP+DePTH" = paste("TGP+DePTH: ", round(roc_combined_score$auc,3)))) +
+  labs(
+       x = "FPR",
+       y = "TPR") +
+  theme_minimal() +
+  theme(legend.position = c(1.19, -0.01), 
+        legend.justification = c(1.32, -0.25), 
+        legend.title = element_blank(),
+        legend.background = element_rect(linetype = "solid", colour = "black"),
+        legend.text = element_text(size = 15, face = "bold"),
+        axis.title = element_text(size = 15),
+        axis.text = element_text(size = 15)) + 
+        coord_fixed() +
+  theme(panel.background = element_rect(fill = "white", color = NA))
+  
+```
+
+```{r}
+write.table(emerson_test$cdr3, "/Users/fuminli/Desktop/TCR\ project/test_tgp.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
+```
+
+```{r}
+emerson_tgp <- read.table("/Users/fuminli/Desktop/TCR project/test_tgp_result.tsv")
+colnames(emerson_tgp) <- c("tcr", "tgp")
+emerson_tgp$magnitude <- -log10(emerson_tgp$tgp)
+emerson_test$magnitude <- emerson_tgp$magnitude
+```
+
+# calculate the auc using only tgp and compare it with DEPTH
+```{r}
+emerson_test$normalized_tgp <- (emerson_test$magnitude - 5.5)/5.5
+emerson_test[emerson_test$magnitude < 5.5,]$normalized_tgp = 0
+emerson_test[emerson_test$magnitude > 11,]$normalized_tgp = 1
+roc_emerson_tgp <- roc(emerson_test$class, emerson_test$normalized_tgp)
+
+roc_emerson_tgp_df <- data.frame(
+  FPR = 1-roc_emerson_tgp$specificities,
+  TPR = roc_emerson_tgp$sensitivities
+)
+```
+
+
+```{r}
+emerson_test$combined_score <- (emerson_test$score + emerson_test$normalized_tgp)/2
+roc_emerson_combined_score <- roc(emerson_test$class, emerson_test$combined_score)
+roc_emerson_depth <- roc(emerson_test$class, emerson_test$score)
+```
+```{r}
+model <- glm(as.factor(class) ~ score + normalized_tgp + score*normalized_tgp, data = emerson_test, family = binomial)
+predicted <- predict(model, type = "response")
+emerson_test$combined_score <- predicted
+```
+
+# compare the performance using tgp and depth, could tgp improve depth performance???(length match,emerson)
+```{r}
+roc_tgp_emerson <- roc(emerson_test$class, emerson_test$normalized_tgp)
+roc_tgp_emerson_df <- data.frame(
+  FPR = 1-roc_tgp_emerson$specificities,
+  TPR = roc_tgp_emerson$sensitivities
+)
+```
+
+```{r}
+roc_depth_emerson <- roc(emerson_test$class, emerson_test$score)
+
+roc_depth_emerson_df <- data.frame(
+  FPR = 1-roc_depth_emerson$specificities,
+  TPR = roc_depth_emerson$sensitivities
+)
+```
+
+```{r}
+roc_combined_score_emerson <- roc(emerson_test$class, emerson_test$combined_score)
+
+roc_combined_score_emerson_df <- data.frame(
+  FPR = 1-roc_combined_score_emerson$specificities,
+  TPR = roc_combined_score_emerson$sensitivities
+)
+```
+
+```{r}
+ggplot() +
+  geom_line(data = roc_combined_score_emerson_df, aes(x = FPR, y = TPR, color = "TGP+DePTH"), size = 1) +
+  geom_line(data = roc_depth_emerson_df, aes(x = FPR, y = TPR, color = "DePTH"), size = 1) +
+  geom_line(data = roc_tgp_emerson_df, aes(x = FPR, y = TPR, color = "TGP"), size = 1) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  scale_color_manual(values = c("TGP" = "blue",
+                                 "DePTH" = "purple",
+                                "TGP+DePTH" = "green"),
+                     labels = c("TGP" = paste("TGP: ", round(roc_tgp_emerson$auc,3)),"DePTH" = paste("DePTH: ", round(roc_depth_emerson$auc,3)), "TGP+DePTH" = paste("TGP+DePTH: ", round(roc_combined_score_emerson$auc,3)))) +
+  labs(
+       x = "FPR",
+       y = "TPR") +
+  theme_minimal() +
+  theme(legend.position = c(1.19, -0.01), 
+        legend.justification = c(1.32, -0.25), 
+        legend.title = element_blank(),
+        legend.background = element_rect(linetype = "solid", colour = "black"),
+        legend.text = element_text(size = 15, face = "bold"),
+        axis.title = element_text(size = 15),
+        axis.text = element_text(size = 15)) + 
+        coord_fixed() +
+  theme(panel.background = element_rect(fill = "white", color = NA))
+```

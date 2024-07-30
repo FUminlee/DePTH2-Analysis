@@ -1,0 +1,441 @@
+---
+title: "length_analysis"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r}
+emerson_test_pos <- read.csv("/Users/fuminli/anaconda3/envs/DePTH_env/test_pos_output.csv/predicted_scores2.csv")
+emerson_test_neg <- read.csv("/Users/fuminli/anaconda3/envs/DePTH_env/test_neg_output.csv/predicted_scores.csv")
+emerson_test_neg$class <- 0
+emerson_test_pos$class <- 1
+emerson_test <- rbind(emerson_test_pos, emerson_test_neg)
+roc_data <- roc(emerson_test$class, emerson_test$score)
+roc_df <- data.frame(
+  FPR = 1-roc_data$specificities,
+  TPR = roc_data$sensitivities
+)
+```
+
+```{r}
+emerson_test <- separate(emerson_test, tcr, into = c("v", "cdr3"), sep = ",")
+emerson_test$length <- nchar(emerson_test$cdr3)
+```
+
+```{r}
+emerson_test_11 <- emerson_test[emerson_test$length == 11,]
+emerson_test_12 <- emerson_test[emerson_test$length == 12,]
+emerson_test_13 <- emerson_test[emerson_test$length == 13,]
+emerson_test_14 <- emerson_test[emerson_test$length == 14,]
+emerson_test_15 <- emerson_test[emerson_test$length == 15,]
+emerson_test_16 <- emerson_test[emerson_test$length == 16,]
+```
+
+```{r}
+roc_emerson_test11 <- roc(emerson_test_11$class, emerson_test_11$score)
+roc_emerson_test11_df <- data.frame(
+  FPR = 1-roc_emerson_test11$specificities,
+  TPR = roc_emerson_test11$sensitivities
+)
+
+roc_emerson_test12 <- roc(emerson_test_12$class, emerson_test_12$score)
+roc_emerson_test12_df <- data.frame(
+  FPR = 1-roc_emerson_test12$specificities,
+  TPR = roc_emerson_test12$sensitivities
+)
+
+roc_emerson_test13 <- roc(emerson_test_13$class, emerson_test_13$score)
+roc_emerson_test13_df <- data.frame(
+  FPR = 1-roc_emerson_test13$specificities,
+  TPR = roc_emerson_test13$sensitivities
+)
+
+roc_emerson_test14 <- roc(emerson_test_14$class, emerson_test_14$score)
+roc_emerson_test14_df <- data.frame(
+  FPR = 1-roc_emerson_test14$specificities,
+  TPR = roc_emerson_test14$sensitivities
+)
+
+roc_emerson_test15 <- roc(emerson_test_15$class, emerson_test_15$score)
+roc_emerson_test15_df <- data.frame(
+  FPR = 1-roc_emerson_test15$specificities,
+  TPR = roc_emerson_test15$sensitivities
+)
+
+roc_emerson_test16 <- roc(emerson_test_16$class, emerson_test_16$score)
+roc_emerson_test16_df <- data.frame(
+  FPR = 1-roc_emerson_test16$specificities,
+  TPR = roc_emerson_test16$sensitivities
+)
+
+auc_11 <- roc_emerson_test11$auc
+auc_12 <- roc_emerson_test12$auc
+auc_13 <- roc_emerson_test13$auc
+auc_14 <- roc_emerson_test14$auc
+auc_15 <- roc_emerson_test15$auc
+auc_16 <- roc_emerson_test16$auc
+```
+
+```{r}
+emerson_test_matchlen_pos <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_I_len_all_match/emerson_test_pos/predicted_scores.csv")
+emerson_test_matchlen_neg <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/HLA_I_len_all_match/emerson_test_neg/predicted_scores.csv")
+emerson_test_matchlen_neg$class = 0
+emerson_test_matchlen_pos$class = 1
+emerson_test_matchlen = rbind(emerson_test_matchlen_neg, emerson_test_matchlen_pos)
+```
+
+```{r}
+emerson_test_matchlen <- separate(emerson_test_matchlen, tcr, into = c("v", "cdr3"), sep = ",")
+emerson_test_matchlen$length <- nchar(emerson_test_matchlen$cdr3)
+```
+
+```{r}
+emerson_test_matchlen_11 <- emerson_test_matchlen[emerson_test_matchlen$length == 11,]
+emerson_test_matchlen_12 <- emerson_test_matchlen[emerson_test_matchlen$length == 12,]
+emerson_test_matchlen_13 <- emerson_test_matchlen[emerson_test_matchlen$length == 13,]
+emerson_test_matchlen_14 <- emerson_test_matchlen[emerson_test_matchlen$length == 14,]
+emerson_test_matchlen_15 <- emerson_test_matchlen[emerson_test_matchlen$length == 15,]
+emerson_test_matchlen_16 <- emerson_test_matchlen[emerson_test_matchlen$length == 16,]
+```
+
+```{r}  
+roc_emerson_test_matchlen_11 <- roc(emerson_test_matchlen_11$class, emerson_test_matchlen_11$score)
+roc_emerson_test_matchlen_11_df <- data.frame(
+  FPR = 1-roc_emerson_test_matchlen_11$specificities,
+  TPR = roc_emerson_test_matchlen_11$sensitivities,
+  length = 11
+)
+
+roc_emerson_test_matchlen_12 <- roc(emerson_test_matchlen_12$class, emerson_test_matchlen_12$score)
+roc_emerson_test_matchlen_12_df <- data.frame(
+  FPR = 1-roc_emerson_test_matchlen_12$specificities,
+  TPR = roc_emerson_test_matchlen_12$sensitivities,
+  length = 12
+)
+
+roc_emerson_test_matchlen_13 <- roc(emerson_test_matchlen_13$class, emerson_test_matchlen_13$score)
+roc_emerson_test_matchlen_13_df <- data.frame(
+  FPR = 1-roc_emerson_test_matchlen_13$specificities,
+  TPR = roc_emerson_test_matchlen_13$sensitivities,
+  length = 13
+)
+
+roc_emerson_test_matchlen_14 <- roc(emerson_test_matchlen_14$class, emerson_test_matchlen_14$score)
+roc_emerson_test_matchlen_14_df <- data.frame(
+  FPR = 1-roc_emerson_test_matchlen_14$specificities,
+  TPR = roc_emerson_test_matchlen_14$sensitivities,
+  length = 14
+)
+
+roc_emerson_test_matchlen_15 <- roc(emerson_test_matchlen_15$class, emerson_test_matchlen_15$score)
+roc_emerson_test_matchlen_15_df <- data.frame(
+  FPR = 1-roc_emerson_test_matchlen_15$specificities,
+  TPR = roc_emerson_test_matchlen_15$sensitivities,
+  length = 15
+)
+
+roc_emerson_test_matchlen_16 <- roc(emerson_test_matchlen_16$class, emerson_test_matchlen_16$score)
+roc_emerson_test_matchlen_16_df <- data.frame(
+  FPR = 1-roc_emerson_test_matchlen_16$specificities,
+  TPR = roc_emerson_test_matchlen_16$sensitivities,
+  length = 16
+)
+
+roc_emerson_test_matchlen_df <- rbind(
+  roc_emerson_test_matchlen_11_df,
+  roc_emerson_test_matchlen_12_df,
+  roc_emerson_test_matchlen_13_df,
+  roc_emerson_test_matchlen_14_df,
+  roc_emerson_test_matchlen_15_df,
+  roc_emerson_test_matchlen_16_df
+)
+```
+
+
+```{r}
+auc_11_matchlen <- roc_emerson_test_matchlen_11$auc
+auc_12_matchlen <- roc_emerson_test_matchlen_12$auc
+auc_13_matchlen <- roc_emerson_test_matchlen_13$auc
+auc_14_matchlen <- roc_emerson_test_matchlen_14$auc
+auc_15_matchlen <- roc_emerson_test_matchlen_15$auc
+auc_16_matchlen <- roc_emerson_test_matchlen_16$auc
+```
+
+```{r}
+ggplot() +
+  geom_line(data = roc_emerson_test11_df, aes(x = FPR, y = TPR, color = "length_11_auc")) +
+  geom_line(data = roc_emerson_test12_df, aes(x = FPR, y = TPR, color = "length_12_auc")) +
+  geom_line(data = roc_emerson_test13_df, aes(x = FPR, y = TPR, color = "length_13_auc")) +
+  geom_line(data = roc_emerson_test14_df, aes(x = FPR, y = TPR, color = "length_14_auc")) +
+  geom_line(data = roc_emerson_test15_df, aes(x = FPR, y = TPR, color = "length_15_auc")) +
+  geom_line(data = roc_emerson_test16_df[300:1,], aes(x = FPR, y = TPR, color = "length_16_auc")) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  scale_color_manual(values = c("length_11_auc" = "blue",
+                                 "length_12_auc" = "red",
+                                 "length_13_auc" = "green",
+                                 "length_14_auc" = "orange",
+                                 "length_15_auc" = "purple",
+                                 "length_16_auc" = "black"),
+                     labels = c("length_11_auc" = paste("11: ", round(auc_11,2)),
+                                "length_12_auc" = paste("12: ", round(auc_12,2)),
+                                "length_13_auc" = paste("13: ", round(auc_13,2)),
+                                "length_14_auc" = paste("14: ", round(auc_14,2)),
+                                "length_15_auc" = paste("15: ", round(auc_15,2)),
+                                "length_16_auc" = paste("16: ", round(auc_16,2)))) +
+  labs(title = "Original model+Emerson",
+       x = "FPR",
+       y = "TPR") +
+  theme_minimal() +
+  theme(legend.position = c(1.11, 0.05), 
+        legend.justification = c(1.25, 0), 
+        legend.title = element_blank(),
+        legend.background = element_rect(linetype = "solid", colour = "black"),
+        legend.text = element_text(size = 15, face = "bold"),
+        plot.title = element_text(size = 15, face = "bold")) + 
+        coord_fixed()
+```
+
+```{r}
+ggplot() +
+  geom_line(data = roc_emerson_test_matchlen_11_df, aes(x = FPR, y = TPR, color = "length_11_auc")) +
+  geom_line(data = roc_emerson_test_matchlen_12_df, aes(x = FPR, y = TPR, color = "length_12_auc")) +
+  geom_line(data = roc_emerson_test_matchlen_13_df, aes(x = FPR, y = TPR, color = "length_13_auc")) +
+  geom_line(data = roc_emerson_test_matchlen_14_df, aes(x = FPR, y = TPR, color = "length_14_auc")) +
+  geom_line(data = roc_emerson_test_matchlen_15_df, aes(x = FPR, y = TPR, color = "length_15_auc")) +
+  geom_line(data = roc_emerson_test_matchlen_16_df[300:1,], aes(x = FPR, y = TPR, color = "length_16_auc")) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  scale_color_manual(values = c("length_11_auc" = "blue",
+                                 "length_12_auc" = "red",
+                                 "length_13_auc" = "green",
+                                 "length_14_auc" = "orange",
+                                 "length_15_auc" = "purple",
+                                 "length_16_auc" = "black"),
+                     labels = c("length_11_auc" = paste("11: ", round(auc_11_matchlen,2)),
+                                "length_12_auc" = paste("12: ", round(auc_12_matchlen,2)),
+                                "length_13_auc" = paste("13: ", round(auc_13_matchlen,2)),
+                                "length_14_auc" = paste("14: ", round(auc_14_matchlen,2)),
+                                "length_15_auc" = paste("15: ", round(auc_15_matchlen,2)),
+                                "length_16_auc" = paste("16: ", round(auc_16_matchlen,2)))) +
+  labs(title = "Length matching model+Emerson",
+       x = "FPR",
+       y = "TPR") +
+  theme_minimal() +
+  theme(legend.position = c(1.11, 0.05), 
+        legend.justification = c(1.25, 0), 
+        legend.title = element_blank(),
+        legend.background = element_rect(linetype = "solid", colour = "black"),
+        legend.text = element_text(size = 15, face = "bold"),
+        plot.title = element_text(size = 15, face = "bold")
+        ) + 
+        coord_fixed()
+```
+
+```{r}
+delmonte_default_pos <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/delmonte_I_all_match/test_pos_result/pos_average_score.csv")
+
+delmonte_default_neg <- read.csv("/Users/fuminli/Desktop/TCR project/delmonte/delmonte_I_all_match/test_neg_result/neg_average_score.csv")
+```
+
+```{r}
+delmonte_control_length_pos <- read.csv("/Users/fuminli/Downloads/HLA_I_len_all_match/delmonte_pos_result.csv")
+
+delmonte_control_length_neg <- read.csv("/Users/fuminli/Downloads/HLA_I_len_all_match/delmonte_neg_result.csv")
+```
+
+```{r}
+delmonte_control_length_neg$class <- 0
+delmonte_control_length_pos$class <- 1
+delmonte_control_length <- rbind(delmonte_control_length_neg[,-1], delmonte_control_length_pos[,-1])
+```
+
+```{r}
+delmonte_control_length_11 <- delmonte_control_length[delmonte_control_length$length == 11,]
+delmonte_control_length_12 <- delmonte_control_length[delmonte_control_length$length == 12,]
+delmonte_control_length_13 <- delmonte_control_length[delmonte_control_length$length == 13,]
+delmonte_control_length_14 <- delmonte_control_length[delmonte_control_length$length == 14,]
+delmonte_control_length_15 <- delmonte_control_length[delmonte_control_length$length == 15,]
+delmonte_control_length_16 <- delmonte_control_length[delmonte_control_length$length == 16,]
+```
+
+```{r}
+roc_control_length_11 <- roc(delmonte_control_length_11$class, delmonte_control_length_11$score)
+
+roc_control_length_11_df <- data.frame(
+  FPR = 1-roc_control_length_11$specificities,
+  TPR = roc_control_length_11$sensitivities,
+  length = 11
+)
+
+roc_control_length_12 <- roc(delmonte_control_length_12$class, delmonte_control_length_12$score)
+
+roc_control_length_12_df <- data.frame(
+  FPR = 1-roc_control_length_12$specificities,
+  TPR = roc_control_length_12$sensitivities,
+  length = 12
+)
+
+roc_control_length_13 <- roc(delmonte_control_length_13$class, delmonte_control_length_13$score)
+
+roc_control_length_13_df <- data.frame(
+  FPR = 1-roc_control_length_13$specificities,
+  TPR = roc_control_length_13$sensitivities,
+  length = 13
+)
+
+roc_control_length_14 <- roc(delmonte_control_length_14$class, delmonte_control_length_14$score)
+
+roc_control_length_14_df <- data.frame(
+  FPR = 1-roc_control_length_14$specificities,
+  TPR = roc_control_length_14$sensitivities,
+  length = 14
+)
+
+roc_control_length_15 <- roc(delmonte_control_length_15$class, delmonte_control_length_15$score)
+
+roc_control_length_15_df <- data.frame(
+  FPR = 1-roc_control_length_15$specificities,
+  TPR = roc_control_length_15$sensitivities,
+  length = 15
+)
+
+roc_control_length_16 <- roc(delmonte_control_length_16$class, delmonte_control_length_16$score)
+
+roc_control_length_16_df <- data.frame(
+  FPR = 1-roc_control_length_16$specificities,
+  TPR = roc_control_length_16$sensitivities,
+  length = 16
+)
+```
+
+```{r}
+ggplot() +
+  geom_line(data = roc_control_length_11_df[247:1,], aes(x = FPR, y = TPR, color = "length 11")) +
+  geom_line(data = roc_control_length_12_df[584:1,], aes(x = FPR, y = TPR, color = "length 12")) +
+  geom_line(data = roc_control_length_13_df[1266:1,], aes(x = FPR, y = TPR, color = "length 13")) +
+  geom_line(data = roc_control_length_14_df[1556:1,], aes(x = FPR, y = TPR, color = "length 14")) +
+  geom_line(data = roc_control_length_15_df[1202:1,], aes(x = FPR, y = TPR, color = "length 15")) +
+  geom_line(data = roc_control_length_16_df[346:1,], aes(x = FPR, y = TPR, color = "length 16")) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  scale_color_manual(values = c("length 11" = "blue",
+                                "length 12" = "red",
+                                "length 13" = "purple",
+                                "length 14" = "orange",
+                                "length 15" = "green",
+                                "length 16" = "pink"),
+                     labels = c("length 11" = paste("11: ", round(roc_control_length_11$auc,2)), "length 12" = paste("12: ", round(roc_control_length_12$auc,2)), "length 13" = paste("13: ", round(roc_control_length_13$auc,2)), "length 14" = paste("14: ", round(roc_control_length_14$auc,2)), "length 15" = paste("15: ", round(roc_control_length_15$auc,2)), "length 16" = paste("16: ", round(roc_control_length_16$auc,2)))) +
+  labs(title = "Length matching model+Delmonte",
+       x = "FPR",
+       y = "TPR") +
+  theme_minimal() +
+  theme(legend.position = c(1.07, 0), 
+        legend.justification = c(1.25, -0.12), 
+        legend.title = element_blank(),
+        legend.background = element_rect(linetype = "solid", colour = "black"),
+        legend.text = element_text(size = 15, face = "bold"),
+        plot.title = element_text(size = 15, face = "bold")) + 
+        coord_fixed()
+```
+
+```{r}
+neg_pair <- read.csv("/Users/fuminli/Desktop/TCR\ project/delmonte/neg_pair_condition_hla_condition_tcr.csv")
+neg_pair$length <- nchar(neg_pair$tcr)
+neg_pair$class <- 0
+delmonte_neg <- neg_pair[,c(6,7,8)]
+sig_pair <- read.csv("/Users/fuminli/Desktop/TCR\ project/delmonte/Delmonte_test_data/sig_pair.csv")
+sig_pair$class <- 1
+delmonte_pos <- sig_pair[,c(8,10,9)]
+```
+
+```{r}
+delmonte <- rbind(delmonte_pos,delmonte_neg)
+```
+
+```{r}
+delmonte_11 <- delmonte[delmonte$length == 11,]
+delmonte_12 <- delmonte[delmonte$length == 12,]
+delmonte_13 <- delmonte[delmonte$length == 13,]
+delmonte_14 <- delmonte[delmonte$length == 14,]
+delmonte_15 <- delmonte[delmonte$length == 15,]
+delmonte_16 <- delmonte[delmonte$length == 16,]
+```
+
+```{r}
+roc_11 <- roc(delmonte_11$class, delmonte_11$score)
+
+roc_11_df <- data.frame(
+  FPR = 1-roc_11$specificities,
+  TPR = roc_11$sensitivities,
+  length = 11
+)
+
+roc_12 <- roc(delmonte_12$class, delmonte_12$score)
+
+roc_12_df <- data.frame(
+  FPR = 1-roc_12$specificities,
+  TPR = roc_12$sensitivities,
+  length = 12
+)
+
+roc_13 <- roc(delmonte_13$class, delmonte_13$score)
+
+roc_13_df <- data.frame(
+  FPR = 1-roc_13$specificities,
+  TPR = roc_13$sensitivities,
+  length = 13
+)
+
+roc_14 <- roc(delmonte_14$class, delmonte_14$score)
+
+roc_14_df <- data.frame(
+  FPR = 1-roc_14$specificities,
+  TPR = roc_14$sensitivities,
+  length = 14
+)
+
+roc_15 <- roc(delmonte_15$class, delmonte_15$score)
+
+roc_15_df <- data.frame(
+  FPR = 1-roc_15$specificities,
+  TPR = roc_15$sensitivities,
+  length = 15
+)
+
+roc_16 <- roc(delmonte_16$class, delmonte_16$score)
+
+roc_16_df <- data.frame(
+  FPR = 1-roc_16$specificities,
+  TPR = roc_16$sensitivities,
+  length = 16
+)
+```
+
+```{r}
+ggplot() +
+  geom_line(data = roc_11_df[247:1,], aes(x = FPR, y = TPR, color = "length 11")) +
+  geom_line(data = roc_12_df[584:1,], aes(x = FPR, y = TPR, color = "length 12")) +
+  geom_line(data = roc_13_df[1266:1,], aes(x = FPR, y = TPR, color = "length 13")) +
+  geom_line(data = roc_14_df[1556:1,], aes(x = FPR, y = TPR, color = "length 14")) +
+  geom_line(data = roc_15_df[1202:1,], aes(x = FPR, y = TPR, color = "length 15")) +
+  geom_line(data = roc_16_df[346:1,], aes(x = FPR, y = TPR, color = "length 16")) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  scale_color_manual(values = c("length 11" = "blue",
+                                "length 12" = "red",
+                                "length 13" = "purple",
+                                "length 14" = "orange",
+                                "length 15" = "green",
+                                "length 16" = "pink"),
+                     labels = c("length 11" = paste("11: ", round(roc_11$auc,2)), "length 12" = paste("12: ", round(roc_12$auc,2)), "length 13" = paste("13: ", round(roc_13$auc,2)), "length 14" = paste("14: ", round(roc_14$auc,2)), "length 15" = paste("15: ", round(roc_15$auc,2)), "length 16" = paste("16: ", round(roc_16$auc,2)))) +
+  labs(title = "Original model+Delmonte",
+       x = "FPR",
+       y = "TPR") +
+  theme_minimal() +
+  theme(legend.position = c(1.09, 0), 
+        legend.justification = c(1.25, -0.12), 
+        legend.title = element_blank(),
+        legend.background = element_rect(linetype = "solid", colour = "black"),
+        legend.text = element_text(size = 15, face = "bold"),
+        plot.title = element_text(size = 15, face = "bold")) + 
+        coord_fixed()
+```

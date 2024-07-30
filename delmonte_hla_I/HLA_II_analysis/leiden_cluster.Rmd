@@ -1,0 +1,99 @@
+---
+title: "Leiden cluster"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Length 18
+
+```{r}
+top_tcr_all_15 <- top_tcr_all_15[order(top_tcr_all_15$mean_score), ]
+top_tcr_all_18 <- top_tcr_all_18[order(top_tcr_all_18$mean_score), ]
+```
+
+```{r}
+distance_matrix_18 <- matrix(0, nrow = 200, ncol = 200)
+top_tcr_top_bottom_18 <- rbind(top_tcr_all_18[169633:169732,], top_tcr_all_18[1:100,])
+top_tcr_top_bottom_18$class = "top"
+top_tcr_top_bottom_18$class[16:30] = "bottom"
+for (i in 1:200) {
+  chain1 <- top_tcr_top_bottom_18$cdr3[i]
+  for (j in 1:200) {
+    chain2 <- top_tcr_top_bottom_18$cdr3[j]
+    distance_matrix_18[i,j] <- TcrDistCalculator(chain1, chain2)
+  }
+}
+```
+
+```{r}
+relation_matrix_18 <- matrix(0, nrow = nrow(distance_matrix_18), ncol = ncol(distance_matrix_18))
+
+relation_matrix_18[distance_matrix_18 < 80] <- 1
+graph <- graph_from_adjacency_matrix(relation_matrix_18, mode = "undirected")
+vertex_labels <- rep("", vcount(graph))
+vertex_labels[1:100] <- "top tcr"
+vertex_labels[101:200] <- "bottom tcr"
+```
+
+```{r}
+set.seed(123)
+graph <- graph_from_adjacency_matrix(relation_matrix_18, mode = "undirected",diag = FALSE)
+plot(graph, layout = layout_with_fr, vertex.color = c(rep("pink", 100), rep("green", 100)), main = "Length 18", vertex.label = "", vertex.size = 5)
+legend("topright", legend = c("Top TCR", "Bottom TCR"), fill = c("pink", "green"))
+```
+
+```{r}
+leiden_result_18 <- suppressWarnings(leiden(graph, res = 0.9))
+```
+
+```{r}
+set.seed(123)
+custom_colors <- c("red", "green", "blue","black", "purple", "#2297E6", "#28E2E5", "#CD0BBC", "#F5C710")
+plot(graph, layout = layout_with_fr, vertex.color = custom_colors[leiden_result_18], vertex.label = "", vertex.size = 5, main = "Length 18")
+legend("topright", legend = paste0("Cluster", 1:9), fill = c("red", "green", "blue", "black", "purple", "#2297E6", "#28E2E5", "#CD0BBC", "#F5C710"))
+```
+
+
+```{r}
+distance_matrix_15 <- matrix(0, nrow = 200, ncol = 200)
+top_tcr_top_bottom_15 <- rbind(top_tcr_all_15[1370507:1370606,], top_tcr_all_15[1:100,])
+top_tcr_top_bottom_15$class = "top"
+top_tcr_top_bottom_15$class[16:30] = "bottom"
+for (i in 1:200) {
+  chain1 <- top_tcr_top_bottom_15$cdr3[i]
+  for (j in 1:200) {
+    chain2 <- top_tcr_top_bottom_15$cdr3[j]
+    distance_matrix_15[i,j] <- TcrDistCalculator(chain1, chain2)
+  }
+}
+```
+
+```{r}
+relation_matrix_15 <- matrix(0, nrow = nrow(distance_matrix_15), ncol = ncol(distance_matrix_15))
+
+relation_matrix_15[distance_matrix_15 < 60] <- 1
+graph <- graph_from_adjacency_matrix(relation_matrix_15, mode = "undirected")
+vertex_labels <- rep("", vcount(graph))
+vertex_labels[1:100] <- "top tcr"
+vertex_labels[101:200] <- "bottom tcr"
+```
+
+```{r}
+set.seed(123)
+graph <- graph_from_adjacency_matrix(relation_matrix_15, mode = "undirected",diag = FALSE)
+plot(graph, layout = layout_with_fr, vertex.color = c(rep("pink", 100), rep("green", 100)), main = "Length 15", vertex.label = "", vertex.size = 5)
+legend("topright", legend = c("Top TCR", "Bottom TCR"), fill = c("pink", "green"))
+```
+
+```{r}
+leiden_result_15 <- suppressWarnings(leiden(graph, res = 0.9))
+```
+
+```{r}
+set.seed(123)
+custom_colors <- c("red", "green", "blue","black", "purple", "#2297E6", "#28E2E5", "#CD0BBC", "#F5C710")
+plot(graph, layout = layout_with_fr, vertex.color = custom_colors[leiden_result_15], vertex.label = "", vertex.size = 5, main = "Length 15")
+legend("topright", legend = paste0("Cluster", 1:9), fill = c("red", "green", "blue", "black", "purple", "#2297E6", "#28E2E5", "#CD0BBC", "#F5C710"))
+```
+
