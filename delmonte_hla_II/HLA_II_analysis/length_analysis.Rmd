@@ -198,10 +198,10 @@ hla_II_top_tcr_test$length <- nchar(hla_II_top_tcr_test$tcr)
 
 ```{r}
 ggplot(hla_II_top_tcr_test[hla_II_top_tcr_test$length > 10 & hla_II_top_tcr_test$length < 19,], aes(x = factor(length), y = mean_score)) +
-  geom_violin(fill = "#00FFFF") +  # 设置小提琴图填充颜色为青色
-  geom_boxplot(width = 0.1, color = "black") +  # 添加箱线图，设置宽度和颜色
-  labs(x = "Length", y = "Mean Score") +  # 设置x轴和y轴标签
-  theme_minimal() +  # 使用最小主题
-  theme(legend.position = "none")  # 移除图例
+  geom_violin(fill = "#00FFFF") +  
+  geom_boxplot(width = 0.1, color = "black") +  
+  labs(x = "Length", y = "Mean Score") +  
+  theme_minimal() + 
+  theme(legend.position = "none") 
 ```
 
