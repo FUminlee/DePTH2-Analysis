@@ -1,0 +1,73 @@
+---
+title: "HLA_II_evaluation"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+emerson_pairs_I <- read.csv("/Users/fuminli/Desktop/HLA_TCR_clean/data/emerson_pairs_I.csv")
+emerson_pairs_no_v_I <- read.csv("/Users/fuminli/Desktop/HLA_TCR_clean/data/emerson_pairs_no_v_I.csv")
+tcga_pairs_I <- read.csv("/Users/fuminli/Desktop/HLA_TCR_clean/data/tcga_pairs.csv")
+```
+
+```{r}
+roc_emerson <- roc(emerson_pairs_I$class, emerson_pairs_I$score)
+roc_emerson_df <- data.frame(
+  FPR = 1-roc_emerson$specificities,
+  TPR = roc_emerson$sensitivities
+)
+```
+
+```{r}
+roc_emerson_no_v <- roc(emerson_pairs_no_v_I$class, emerson_pairs_no_v_I$score)
+roc_emerson_no_v_df <- data.frame(
+  FPR = 1-roc_emerson_no_v$specificities,
+  TPR = roc_emerson_no_v$sensitivities
+)
+```
+
+```{r}
+roc_tcga <- roc(tcga_pairs_I$class, tcga_pairs_I$score)
+roc_tcga_df <- data.frame(
+  FPR = 1-roc_tcga$specificities,
+  TPR = roc_tcga$sensitivities
+)
+```
+
+
+```{r}
+auc_tcga <- roc_tcga$auc
+auc_emerson <- roc_emerson$auc
+auc_emerson_no_v <- roc_emerson_no_v$auc
+```
+
+```{r}
+ggplot() +
+  geom_line(data = roc_tcga_df, aes(x = FPR, y = TPR, color = "tcga_auc"), size = 1.5) +
+  geom_line(data = roc_emerson_df, aes(x = FPR, y = TPR, color = "emerson_auc"), size = 1.5) +
+  geom_line(data = roc_emerson_no_v_df, aes(x = FPR, y = TPR, color = "emerson_no_v_auc"), size = 1.5) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", size = 1.5) +
+  scale_color_manual(values = c("tcga_auc" = "purple",
+                                "emerson_auc" = "blue",
+                                "emerson_no_v_auc" = "orange"),
+                     labels = c("tcga_auc" = paste("delmonte: ", round(auc_tcga, 2)),
+                                "emerson_auc" = paste("emerson: ", round(auc_emerson, 2)),
+                                "emerson_no_v_auc" = paste("emerson(without v): ", round(auc_emerson_no_v, 2)))) +
+  labs(title = "DePTH evaluation",
+       x = "FPR",
+       y = "TPR") +
+  theme_minimal() +
+  theme(legend.position = c(1.13, 0.05), 
+        legend.justification = c(1.25, 0), 
+        legend.title = element_blank(),
+        legend.background = element_rect(linetype = "solid", colour = "black"),
+        legend.text = element_text(size = 12, face = "bold"),
+        plot.title = element_text(size = 15, face = "bold"),
+        axis.title = element_text(size = 15, face = "bold"),
+        axis.text = element_text(size = 15, face = "bold"),
+        legend.key.size = unit(1.5, 'lines')) + 
+  coord_fixed()
+```
+
+

@@ -1,0 +1,46 @@
+---
+title: "length_depth_mean_score_relationship"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+delmonte_top10000_tcr_sample <- read.csv("/Users/fuminli/Desktop/HLA_TCR_clean/data/delmonte_top10000_tcr_sample.csv")
+```
+
+# hla1
+
+```{r}
+ggplot(delmonte_top10000_tcr_sample[delmonte_top10000_tcr_sample$cdr3_length > 10 & delmonte_top10000_tcr_sample$cdr3_length < 19,], aes(x = factor(cdr3_length), y = mean_score_hla1)) +
+  geom_violin(fill = "#00FFFF") +  
+  geom_boxplot(width = 0.1, color = "black") +  
+  labs(x = "CDR3 Length", y = "DePTH Mean Score") + 
+  theme_minimal() + 
+  theme(
+    legend.position = "none", 
+    axis.title = element_text(size = 16), 
+    axis.text = element_text(size = 14), 
+    plot.title = element_text(size = 20), 
+    strip.text = element_text(size = 14) 
+  )
+```
+
+```{r}
+ggplot(delmonte_top10000_tcr_sample[delmonte_top10000_tcr_sample$cdr3_length > 10 & delmonte_top10000_tcr_sample$cdr3_length < 19,], aes(x = factor(cdr3_length), y = mean_score_hla2)) +
+  geom_violin(fill = "#00FFFF") +  
+  geom_boxplot(width = 0.1, color = "black") +  
+  labs(x = "CDR3 Length", y = "DePTH Mean Score") + 
+  theme_minimal() +  
+  theme(
+    legend.position = "none", 
+    axis.title = element_text(size = 16), 
+    axis.text = element_text(size = 14), 
+    plot.title = element_text(size = 20), 
+    strip.text = element_text(size = 14)  
+  )
+```
