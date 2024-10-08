@@ -1,0 +1,275 @@
+---
+title: "model_comparison_II"
+author: "Fumin Li"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# load combined model results
+
+# load delmonte test results
+
+```{r}
+for (i in 1:5) {
+  file_path_pos <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/combined_model_II/split_", i, "/delmonte_test/test_pos_output/avg_predicted_scores.csv")
+  
+  file_path_neg <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/combined_model_II/split_", i, "/delmonte_test/test_neg_output/avg_predicted_scores.csv")
+
+  assign(paste0("combined_model_delmonte_test_pos_", i), read.csv(file_path_pos))
+  assign(paste0("combined_model_delmonte_test_neg_", i), read.csv(file_path_neg))
+}
+```
+
+# cal delmonte auc
+
+```{r}
+combined_model_delmonte_auc_list <- list()
+for (i in 1:5) {
+
+  pos_scores <- get(paste0("combined_model_delmonte_test_pos_", i))$score 
+  neg_scores <- get(paste0("combined_model_delmonte_test_neg_", i))$score  
+
+  test_set <- data.frame(
+    score = c(pos_scores, neg_scores),
+    label = c(rep(1, length(pos_scores)), rep(0, length(neg_scores))) 
+  )
+  
+
+  roc_obj <- roc(test_set$label, test_set$score)
+  auc_value <- auc(roc_obj)
+
+  combined_model_delmonte_auc_list[[i]] <- auc_value
+}
+```
+
+# load emerson test results
+
+```{r}
+for (i in 1:5) {
+  file_path_pos <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/combined_model_II/split_", i, "/emerson_test/test_pos_output/avg_predicted_scores.csv")
+  
+  file_path_neg <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/combined_model_II/split_", i, "/emerson_test/test_neg_output/avg_predicted_scores.csv")
+
+  assign(paste0("combined_model_emerson_test_pos_", i), read.csv(file_path_pos))
+  assign(paste0("combined_model_emerson_test_neg_", i), read.csv(file_path_neg))
+}
+```
+
+# cal emerson auc
+
+```{r}
+combined_model_emerson_auc_list <- list()
+for (i in 1:5) {
+
+  pos_scores <- get(paste0("combined_model_emerson_test_pos_", i))$score 
+  neg_scores <- get(paste0("combined_model_emerson_test_neg_", i))$score  
+
+  test_set <- data.frame(
+    score = c(pos_scores, neg_scores),
+    label = c(rep(1, length(pos_scores)), rep(0, length(neg_scores))) 
+  )
+  
+
+  roc_obj <- roc(test_set$label, test_set$score)
+  auc_value <- auc(roc_obj)
+
+  combined_model_emerson_auc_list[[i]] <- auc_value
+}
+```
+
+# load delmonte model results
+
+# load delmonte test results
+
+```{r}
+for (i in 1:5) {
+  file_path_pos <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/delmonte_model_II/split_", i, "/delmonte_test/test_pos_output/avg_predicted_scores.csv")
+  
+  file_path_neg <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/delmonte_model_II/split_", i, "/delmonte_test/test_neg_output/avg_predicted_scores.csv")
+
+  assign(paste0("delmonte_model_delmonte_test_pos_", i), read.csv(file_path_pos))
+  assign(paste0("delmonte_model_delmonte_test_neg_", i), read.csv(file_path_neg))
+}
+```
+
+# cal delmonte auc
+
+```{r}
+delmonte_model_delmonte_auc_list <- list()
+
+for (i in 1:5) {
+
+  pos_scores <- get(paste0("delmonte_model_delmonte_test_pos_", i))$score 
+  neg_scores <- get(paste0("delmonte_model_delmonte_test_neg_", i))$score  
+
+  test_set <- data.frame(
+    score = c(pos_scores, neg_scores),
+    label = c(rep(1, length(pos_scores)), rep(0, length(neg_scores))) 
+  )
+  
+
+  roc_obj <- roc(test_set$label, test_set$score)
+  auc_value <- auc(roc_obj)
+
+  delmonte_model_delmonte_auc_list[[i]] <- auc_value
+}
+```
+
+# load emerson test results
+
+```{r}
+for (i in 1:5) {
+  file_path_pos <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/delmonte_model_II/split_", i, "/emerson_test/test_pos_output/avg_predicted_scores.csv")
+  
+  file_path_neg <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/delmonte_model_II/split_", i, "/emerson_test/test_neg_output/avg_predicted_scores.csv")
+
+  assign(paste0("delmonte_model_emerson_test_pos_", i), read.csv(file_path_pos))
+  assign(paste0("delmonte_model_emerson_test_neg_", i), read.csv(file_path_neg))
+}
+```
+
+# cal emerson auc
+
+```{r}
+delmonte_model_emerson_auc_list <- list()
+for (i in 1:5) {
+
+  pos_scores <- get(paste0("delmonte_model_emerson_test_pos_", i))$score 
+  neg_scores <- get(paste0("delmonte_model_emerson_test_neg_", i))$score  
+
+  test_set <- data.frame(
+    score = c(pos_scores, neg_scores),
+    label = c(rep(1, length(pos_scores)), rep(0, length(neg_scores))) 
+  )
+  
+
+  roc_obj <- roc(test_set$label, test_set$score)
+  auc_value <- auc(roc_obj)
+  
+  delmonte_model_emerson_auc_list[[i]] <- auc_value
+}
+```
+
+# load Original DePTH model's result on Emerson and Delmonte
+
+# load delmonte test results
+
+```{r}
+for (i in 1:5) {
+  file_path_pos <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/delmonte_model_II/split_", i, "/delmonte_test/ori_DePTH_pos_output/predicted_scores.csv")
+  
+  file_path_neg <- paste0("/Users/fuminli/Desktop/HLA_TCR_clean/model/delmonte_model_II/split_", i, "/delmonte_test/ori_DePTH_neg_output/predicted_scores.csv")
+
+  assign(paste0("emerson_model_delmonte_test_pos_", i), read.csv(file_path_pos))
+  assign(paste0("emerson_model_delmonte_test_neg_", i), read.csv(file_path_neg))
+}
+```
+
+# cal delmonte auc
+
+```{r}
+emerson_model_delmonte_auc_list <- list()
+
+for (i in 1:5) {
+
+  pos_scores <- get(paste0("emerson_model_delmonte_test_pos_", i))$score 
+  neg_scores <- get(paste0("emerson_model_delmonte_test_neg_", i))$score  
+
+  test_set <- data.frame(
+    score = c(pos_scores, neg_scores),
+    label = c(rep(1, length(pos_scores)), rep(0, length(neg_scores))) 
+  )
+  
+
+  roc_obj <- roc(test_set$label, test_set$score)
+  auc_value <- auc(roc_obj)
+
+  emerson_model_delmonte_auc_list[[i]] <- auc_value
+}
+```
+
+# for emerson
+
+```{r}
+emerson_pairs_II <- read.csv("/Users/fuminli/Desktop/HLA_TCR_clean/data/emerson_pairs_II.csv")
+roc_emerson_II <- roc(emerson_pairs_II$class, emerson_pairs_II$score)
+```
+
+```{r}
+first_values <- c(combined_model_delmonte_auc_list[[1]], 
+                  emerson_model_delmonte_auc_list[[1]],
+                  delmonte_model_delmonte_auc_list[[1]],
+                  combined_model_emerson_auc_list[[1]],
+                  roc_emerson_II$auc,
+                  delmonte_model_emerson_auc_list[[1]])
+
+testing_data <- rep(c("Delmonte Test", "Emerson Test"), each = 3)
+training_model <- rep(c("Combined Model", "Emerson Model", "Delmonte Model"), times = 2)
+colors <- c("orange", "lightgreen", "lightblue")  # Combined Model和Delmonte Model的颜色
+```
+
+```{r}
+adjusted_values = first_values - 0.5
+
+par(font.main = 2,   
+    font.lab = 2,   
+    font.axis = 2,  
+    font = 2)       
+
+barplot(height = adjusted_values,
+        beside = TRUE,           
+        names.arg = testing_data,         
+        col = colors[as.numeric(factor(training_model))], 
+        main = "Emerson+Delmonte vs Emerson vs Delmonte",  
+        xlab = "Testing Data",            
+        ylab = "AUC",                 
+        ylim = c(0, 0.5),                
+        font.main = 2,               
+        font.lab = 2,                 
+        font.axis = 2,                 
+        legend.text = unique(training_model),
+        args.legend = list(x = "topright", inset = c(-0.05, -0.08)),
+        space = c(0, 0, 0, 1),          
+        xaxt = "n",                    
+        yaxt = "n"                    
+)
+
+axis(2, at = seq(0, 0.5, by = 0.1), labels = seq(0.5, 1, by = 0.1))
+
+axis(1, at = seq(1.5, 6, by = 3), labels = c("Delmonte Test", "                                  Emerson Test"), tick = FALSE)
+```
+
+```{r}
+# 生成表格
+models <- c("Emerson", "Delmonte", "Emerson+Delmonte")
+test_data <- c("Emerson", "Delmonte")
+
+# 使用 expand.grid 生成组合
+df <- expand.grid(Training = models, Testing = test_data)
+```
+
+```{r}
+for (i in 1:5) {
+  df[[paste0("Split", i)]] <- round(c(
+    roc_emerson_I$auc,
+    delmonte_model_emerson_auc_list[[i]],
+    combined_model_emerson_auc_list[[i]],
+    emerson_model_delmonte_auc_list[[i]],
+    delmonte_model_delmonte_auc_list[[i]],
+    combined_model_delmonte_auc_list[[i]],
+    roc_tcga_I$auc,
+    delmonte_model_tcga_auc_list[[i]],
+    combined_model_tcga_auc_list[[i]]
+  ), 2)
+}
+
+```
+
+```{r}
+df$split5 <- round(df$split5,2)
+```
+
+```{r}
+# 使用 flextable 创建表格
+flextable(df)
+```
