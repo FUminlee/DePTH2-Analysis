@@ -7,8 +7,8 @@ DePTH is a predictive model designed to assess the interaction between Human leu
 This repository focuses on the further development and analysis of the DePTH model, including:
 1. **Confounding Factors Analysis**  
    - Analysis of factors such as:
+     - TCR generation probability
      - CDR3 length  
-     - TCR generation probability  
 
 2. **DePTH 2.0 Enhancements**  
    - Updates and improvements to the original DePTH model for better performance and usability.
@@ -57,6 +57,8 @@ install.packages(setdiff(required_packages, installed.packages()[, "Package"]))
 ```
 
 ### Confounding Variable Analysis
+
+#### TCR generation probability
 
 
 
