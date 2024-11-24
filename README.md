@@ -14,4 +14,47 @@ This repository focuses on the further development and analysis of the DePTH mod
    - Updates and improvements to the original DePTH model for better performance and usability.
 
 
+## Getting Started
+
+### Prerequisites
+All the analyses conducted in this project are implemented in **R**. Depending on the type of analysis, different R packages are required. For convenience, we list all the required packages below. Please ensure they are installed before running the scripts.
+
+### Required R Packages
+To run the analyses, you will need the following R packages:
+
+- `tidyr`
+- `dplyr`
+- `lmtest`
+- `stringr`
+- `ggplot2`
+- `gridExtra`
+- `plotly`
+- `Matrix`
+- `uwot`
+- `irlba`
+- `pROC`
+- `ggpointdensity`
+- `viridis`
+- `purrr`
+- `igraph`
+- `pbapply`
+- `data.table`
+- `Rtsne`
+- `leidenbase`
+- `reshape2`
+
+### Installing Required Packages
+You can install the required packages in R using the following command:
+
+```R
+required_packages <- c(
+  "tidyr", "dplyr", "lmtest", "stringr", "ggplot2", "gridExtra", "plotly",
+  "Matrix", "uwot", "irlba", "pROC", "ggpointdensity", "viridis", "purrr",
+  "igraph", "pbapply", "data.table", "Rtsne", "leidenbase", "reshape2"
+)
+
+install.packages(setdiff(required_packages, installed.packages()[, "Package"]))
+
+
+
 
