@@ -54,8 +54,9 @@ required_packages <- c(
 )
 
 install.packages(setdiff(required_packages, installed.packages()[, "Package"]))
+```
 
-## Confounding Variable Analysis
+### Confounding Variable Analysis
 
 
 
