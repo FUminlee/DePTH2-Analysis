@@ -55,6 +55,47 @@ required_packages <- c(
 
 install.packages(setdiff(required_packages, installed.packages()[, "Package"]))
 
+## Confounding Variable Analysis
+
+### Overview
+This section focuses on analyzing potential confounding variables that may influence the performance or interpretation of the DePTH model. Confounding variables such as **CDR3 length** and **TCR generation probability** are evaluated to better understand their impact on model predictions.
+
+### Steps for Analysis
+1. **Data Preparation**:  
+   - Ensure that the dataset includes relevant features such as CDR3 length and generation probability.  
+   - Clean and preprocess the data as needed.
+
+2. **Exploratory Data Analysis (EDA)**:  
+   - Use visualizations and statistical summaries to assess the distribution of confounding variables.  
+   - Examples include histograms for CDR3 length or scatter plots for TCR generation probability vs. predicted scores.
+
+3. **Statistical Testing**:  
+   - Perform statistical tests to evaluate the relationship between confounding variables and model outputs (e.g., correlation analysis or regression models).
+
+4. **Visualization of Results**:  
+   - Generate plots to illustrate the effects of confounding variables:
+     - CDR3 length distributions.
+     - Predicted scores stratified by TCR generation probabilities.
+   - Use packages like `ggplot2`, `ggpointdensity`, and `viridis` for detailed visualizations.
+
+### Example Code
+```R
+# Example: Analyze the effect of CDR3 length
+library(ggplot2)
+library(ggpointdensity)
+
+# Scatter plot of predicted score vs. CDR3 length
+ggplot(data, aes(x = CDR3_length, y = predicted_score)) +
+  geom_pointdensity() +
+  scale_color_viridis() +
+  labs(
+    title = "Effect of CDR3 Length on Predicted Scores",
+    x = "CDR3 Length",
+    y = "Predicted Score"
+  ) +
+  theme_minimal()
+
+
 
 
 
