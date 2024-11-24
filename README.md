@@ -1,7 +1,7 @@
 # DePTH2-Analysis
 
 ## Overview
-DePTH is a predictive model designed to assess the interaction between HLA and TCR. By inputting an HLA and a TCR, the model generates a score representing their association. For details on the model structure and usage, please refer to [https://liusi2019.github.io/DePTH-tutorial/](#).
+DePTH is a predictive model designed to assess the interaction between Human leukocyte antigens(HLA) and T-cell receptor(TCR). By inputting an HLA and a TCR, the model generates a score representing their association. For details on the model structure and usage, please refer to [https://liusi2019.github.io/DePTH-tutorial/](#).
 
 ## Features
 This repository focuses on the further development and analysis of the DePTH model, including:
