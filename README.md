@@ -1,7 +1,7 @@
 # DePTH2-Analysis
 
 ## Overview
-DePTH is a predictive model designed to assess the interaction between Human leukocyte antigens(HLA) and T-cell receptor(TCR). By inputting an HLA and a TCR, the model generates a score representing their association. For details on the model structure and usage, please refer to [https://liusi2019.github.io/DePTH-tutorial/](#).
+DePTH is a predictive model designed to assess the interaction between Human leukocyte antigens(HLA) and T-cell receptor(TCR). By inputting an HLA and a TCR, the model generates a score representing their association. For details on the model structure and usage, please refer to [https://liusi2019.github.io/DePTH-tutorial/](#). This GitHub repository provides an analysis of several significant confounding factors involved in the DePTH model, along with improvements to the original model, resulting in DePTH 2.0. All code in this repository follows the methodology described in the paper: [XXX](#).
 
 ## Features
 This repository focuses on the further development and analysis of the DePTH model, including:
@@ -17,7 +17,7 @@ This repository focuses on the further development and analysis of the DePTH mod
 ## Getting Started
 
 ### Data Availability
-In our analysis, we primarily use the **Delmonte data** and **TCGA data**. The data provided in the `data` folder has already been preprocessed and is ready for testing. For the raw Delmonte and TCGA data, please refer to  [https://clients.adaptivebiotech.com/pub/delmonte-2023-jaci](#)(Delmonte) and  [https://gdc.cancer.gov/about-data/publications/panimmune](#)(TCGA). Currently, the preprocessing steps are not included in this repository, but we plan to add them in the future. The preprocessed data provides the HLA-TCR pairs in the Positive Set and Negative Set. For details on the selection criteria, please refer to the supplementary materials of XXX.
+In our analysis, we primarily use the **Delmonte data** and **TCGA data**. The data provided in the `data` folder has already been preprocessed and is ready for testing. For the raw Delmonte and TCGA data, please refer to  [https://clients.adaptivebiotech.com/pub/delmonte-2023-jaci](#)(Delmonte) and  [https://gdc.cancer.gov/about-data/publications/panimmune](#)(TCGA). Currently, the preprocessing steps are not included in this repository, but we plan to add them in the future. The preprocessed data provides the HLA-TCR pairs in the Positive Set and Negative Set. For details on the selection criteria, please refer to the supplementary materials of [XXX](#).
 
 ### Prerequisites
 All the analyses conducted in this project are implemented in **R**. Depending on the type of analysis, different R packages are required. For convenience, we list all the required packages below. Please ensure they are installed before running the scripts.
