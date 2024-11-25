@@ -72,9 +72,14 @@ The analysis of TCR generation probability focuses on understanding the relation
 
 This analysis helps to assess the extent to which TCR generation probability influences or correlates with DePTH model predictions.
 
-
 #### CDR3 Length
 
+The analysis of CDR3 length focuses on understanding its relationship with the scores provided by the DePTH model. This is divided into three main aspects:
+
+1. Examining the distribution of CDR3 length in the **Positive Set** and **Negative Set**.  
+2. Exploring the relationship between CDR3 length and the DePTH mean score (the average score between a given TCR and all HLAs).  
+
+This analysis helps to assess the extent to which CDR3 Length influences or correlates with DePTH model predictions.
 
 
 
