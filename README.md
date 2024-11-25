@@ -16,6 +16,11 @@ This repository focuses on the further development and analysis of the DePTH mod
 
 ## Getting Started
 
+### Data Availability
+In our analysis, we primarily use the **Delmonte data** and **TCGA data**. The data provided in the `data` folder has already been preprocessed and is ready for testing.  
+For the raw Delmonte and TCGA data, please refer to **XXX** and **XXX**.  
+Currently, the preprocessing steps are not included in this repository, but we plan to add them in the future.
+
 ### Prerequisites
 All the analyses conducted in this project are implemented in **R**. Depending on the type of analysis, different R packages are required. For convenience, we list all the required packages below. Please ensure they are installed before running the scripts.
 
