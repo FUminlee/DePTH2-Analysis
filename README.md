@@ -79,5 +79,8 @@ The analysis of CDR3 length focuses on understanding its relationship with the s
 
 This analysis helps to assess the extent to which CDR3 Length influences or correlates with DePTH model predictions.
 
-
+Additionally, other analyses and validations mentioned in the paper can be found in the corresponding files within the `analysis` folder. To run these analyses:
+1. Download the `data` folder.  
+2. Update the `data` directory paths in the `analysis` scripts.  
+3. Execute the scripts to reproduce the results.
 
