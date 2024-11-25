@@ -59,7 +59,7 @@ required_packages <- c(
 install.packages(setdiff(required_packages, installed.packages()[, "Package"]))
 ```
 
-### Confounding Variable Analysis
+### Confounding Factors Analysis
 
 #### TCR Generation Probability
 
